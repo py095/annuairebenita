@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
 
+import '../RecherchePage.dart';
 import 'AccueilPage.dart';
 import 'NewsPage.dart';
 import 'ProfilsPage.dart';
-import '../RecherchePage.dart';
 
 void main() {
   runApp(new HomePage());
@@ -18,14 +18,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   PageController _pageController = PageController();
 
-  List<Widget> _screens = [NewsPages(), RecherchePages(), ProfilPage()];
+  List<Widget> _screens = [NewsPages(), RecherchePage(), ProfilPage()];
 
   int _current = 0;
   Widget callPage(int current){
     switch(current){
       case 0: return AccueilPage();
       case 1: return  NewsPages();
-      case 2: return RecherchePages();
+      case 2: return RecherchePage();
       case 3: return ProfilPage();
       break;
       default: return AccueilPage();

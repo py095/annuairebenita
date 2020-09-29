@@ -1,48 +1,38 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'src/locations.dart' as locations;
 
-
-class RecherchePages extends StatefulWidget {
+class RecherchePage extends StatefulWidget {
   @override
-  _RecherchePagesState createState() => _RecherchePagesState();
+  _RecherchePageState createState() => _RecherchePageState();
 }
+class _RecherchePageState extends State<RecherchePage> {
 
-class _RecherchePagesState extends State<RecherchePages> {
-  final Map<String, Marker> _markers = {};
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
-    setState(() {
-      _markers.clear();
-      for (final office in googleOffices.offices) {
-        final marker = Marker(
-          markerId: MarkerId(office.name),
-          position: LatLng(office.lat, office.lng),
-          infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
-          ),
-        );
-        _markers[office.name] = marker;
-      }
-    });
+  GoogleMapController mapController;
+  Completer<GoogleMapController> _controller = Completer();
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Google Office Locations'),
-          backgroundColor: Colors.green[700],
+          title:Center(
+            child: Text("Recherche Annuaire"),
+          ),
+          backgroundColor: Colors.lightBlue,
         ),
         body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: const LatLng(0, 0),
-            zoom: 2,
-          ),
-          markers: _markers.values.toSet(),
+          mapType: MapType.hybrid,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
         ),
       ),
     );
