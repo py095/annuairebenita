@@ -1,40 +1,32 @@
-import 'dart:async';
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class RecherchePage extends StatefulWidget {
+class BasePainter extends CustomPainter {
+  Color baseColor;
+
+  Offset center;
+  double radius;
+
+  BasePainter({@required this.baseColor});
+
   @override
-  _RecherchePageState createState() => _RecherchePageState();
-}
-class _RecherchePageState extends State<RecherchePage> {
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = baseColor
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 12.0;
 
-  GoogleMapController mapController;
-  Completer<GoogleMapController> _controller = Completer();
+    center = Offset(size.width / 2, size.height / 2);
+    radius = min(size.width / 2, size.height / 2);
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+    canvas.drawCircle(center, radius, paint);
   }
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title:Center(
-            child: Text("Recherche Annuaire"),
-          ),
-          backgroundColor: Colors.lightBlue,
-        ),
-        body: GoogleMap(
-          mapType: MapType.hybrid,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        ),
-      ),
-    );
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
